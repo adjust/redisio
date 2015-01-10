@@ -32,10 +32,30 @@ func (writer *Writer) Write(p []byte) (n int, err error) {
 }
 
 func (writer *Writer) startConsumer() {
+	var todo int
+	var batch []string
+
 	for logLine := range writer.inputChannel {
-		err := writer.redisClient.RPush(writer.listName, logLine).Err()
-		if err != nil {
-			panic(err)
+		batch = append(batch, logLine)
+
+		// are we still on a batch run?
+		if todo > 0 {
+			todo--
+			continue
 		}
+
+		// batch run done, flushing
+		writer.pushToRedis(batch)
+		batch = []string{}
+
+		// fetch next batch run size
+		todo = len(writer.inputChannel) - 1 // otherwise we'd lose the last line
+	}
+}
+
+func (writer *Writer) pushToRedis(logLines []string) {
+	err := writer.redisClient.RPush(writer.listName, logLines...).Err()
+	if err != nil {
+		panic(err)
 	}
 }
