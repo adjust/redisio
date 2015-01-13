@@ -1,6 +1,8 @@
 package redisio
 
 import (
+	"time"
+
 	redis "github.com/adjust/redis-latest-head"
 )
 
@@ -29,6 +31,12 @@ func NewWriter(redisClient *redis.Client, listName string) (writer *Writer, err 
 func (writer *Writer) Write(p []byte) (n int, err error) {
 	writer.inputChannel <- string(p)
 	return len(p), nil
+}
+
+func (writer *Writer) Wait() {
+	for len(writer.inputChannel) > 0 {
+		time.Sleep(500 * time.Microsecond)
+	}
 }
 
 func (writer *Writer) startConsumer() {
