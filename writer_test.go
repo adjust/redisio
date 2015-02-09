@@ -7,7 +7,7 @@ import (
 	"time"
 
 	. "github.com/adjust/gocheck"
-	redis "github.com/adjust/redis-latest-head"
+	"github.com/adjust/redis"
 )
 
 func Test(t *testing.T) { TestingT(t) }
