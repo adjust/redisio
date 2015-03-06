@@ -1,7 +1,7 @@
 package redisio
 
 import (
-	redis "github.com/adjust/redis-latest-head"
+	"github.com/adjust/redis"
 )
 
 type Writer struct {

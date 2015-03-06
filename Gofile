@@ -3,7 +3,7 @@
         {
             "name" : "production",
             "packages": [
-                { "name" : "github.com/adjust/redis-latest-head", "branch" : "master" }
+                { "name" : "github.com/adjust/redis", "branch" : "v2.3.2" }
             ]
         }
    ],
